@@ -16,6 +16,14 @@ class Carta {
         this.setPalo(palo);
         this.setValor(valor);
     }
+    
+    /**
+     * Muestra el texto de la carta en formato legible
+     * @returns {String} texto
+     */
+    mostrarTextoCarta(){
+        return `${this.numero} de ${Carta.#NOMBRE_PALOS.get(this.palo)}`;
+    }
 
     /**
      * Inserta el número de la carta
@@ -55,19 +63,15 @@ class Carta {
         this.valor = valor;
     }
 
-    get mostrarTextoCarta(){
-        return `${this.numero} de ${Carta.#NOMBRE_PALOS.get(this.numeroPalo)}`;
-    }
-
-   get getPalo(){
+   getPalo(){
     return this.palo;
    }
 
-   get getValor(){
+   getValor(){
     return this.valor;
    }
 
-   get getNumero(){
+   getNumero(){
     return this.numero;
    }
 }
@@ -118,7 +122,7 @@ class Carta {
  static seleccionarCarta(numero, palo){
 
     let carta = Mazo.#CARTAS.filter((carta) => 
-        carta.numero = numero
+        carta.numero == numero
         && carta.palo == palo
     );
 
@@ -129,6 +133,8 @@ class Carta {
 let mazo = new Mazo();
 
 let carta = Mazo.seleccionarCarta(1, 1);
+
+console.log(carta);
 
 console.log(`La carta ${carta.mostrarTextoCarta()} tiene el valor de ${carta.getValor()}`);
 
