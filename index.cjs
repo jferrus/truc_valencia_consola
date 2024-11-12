@@ -43,6 +43,10 @@ class Carta {
         this.palo = palo;
     }
 
+    /**
+     * Insertar el valor de la carta
+     * @param {Integer} valor
+     */
     set setValor(valor){
         if(valor < 1 || valor > Carta.#MAX_VALOR) {
             throw RangeError("El rango del valor no es válido");
@@ -54,17 +58,32 @@ class Carta {
     /**
      * Muestra la carta en formato texto legible por el jugador
      */
-    get mostrarTextoCarta(){
+    mostrarTextoCarta(){
         return `${this.numero} de ${Carta.#NOMBRE_PALOS.get(this.numeroPalo)}`;
     }
+
+   get getPalo(){
+    return this.palo;
+   }
+
+   get getValor(){
+    return this.valor;
+   }
+
+   get getNumero(){
+    return this.numero;
+   }
 }
 
+/**
+ * El mazo de cartas de la baraja espanyola para el Truc
+ */
  class Mazo {
 
     /**
      * Las cartas jugables del mazo
      */
-    #cartas = [
+    static #CARTAS = [
       new Carta(1, 0, 9),
       new Carta(1, 1, 8),
       new Carta(7, 0, 7),
@@ -92,6 +111,24 @@ class Carta {
     constructor(){
         
     }
+
+    /**
+     * Devuelve el valor de la carta
+     * @param {Integer} numero 
+     * @param {Integer} palo 
+     * @returns {Integer} valor
+     */
+   static valorCarta(numero, palo){
+
+    const carta = Mazo.#CARTAS.filter((carta) => 
+        carta.numero = numero
+        && carta.palo == palo
+    );
+
+    return carta.getValor();    
  }
+}
 
+let mazo = new Mazo();
 
+mazo.valorCarta(1, 1);
