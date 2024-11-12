@@ -21,7 +21,7 @@ class Carta {
      * Inserta el número de la carta
      * @param {Integer} numero
      */
-    set setNumero(numero){
+    setNumero(numero){
 
         if(!Carta.#NUMERO_JUGABLES.includes(numero)) {
             throw RangeError("El rango del número de la carta no es válido.");
@@ -34,9 +34,9 @@ class Carta {
      * Inserta el número identificador del palo
      * @param {Integer} palo
      */
-    set setPalo(palo) {
+     setPalo(palo) {
 
-        if(numeroPalo < 0 || numeroPalo > Carta.#NOMBRE_PALOS.length()){
+        if(palo < 0 || palo > Carta.#NOMBRE_PALOS.length){
             throw RangeError("El rango del número identificador del palo no es válido.");
         }
 
@@ -47,7 +47,7 @@ class Carta {
      * Insertar el valor de la carta
      * @param {Integer} valor
      */
-    set setValor(valor){
+    setValor(valor){
         if(valor < 1 || valor > Carta.#MAX_VALOR) {
             throw RangeError("El rango del valor no es válido");
         }
@@ -55,10 +55,7 @@ class Carta {
         this.valor = valor;
     }
 
-    /**
-     * Muestra la carta en formato texto legible por el jugador
-     */
-    mostrarTextoCarta(){
+    get mostrarTextoCarta(){
         return `${this.numero} de ${Carta.#NOMBRE_PALOS.get(this.numeroPalo)}`;
     }
 
@@ -112,11 +109,13 @@ class Carta {
         
     }
 
- /**
-  * Selecciona una carta a partir del número y del palo
-  * @returns {Carta} un objeto carta
-  */
- static seleccionarCarta(){
+/**
+* Selecciona una carta a partir del número y del palo
+ * @param {Integer} numero 
+ * @param {Integer} palo 
+ * @returns {Carta} un objeto carta
+ */
+ static seleccionarCarta(numero, palo){
 
     let carta = Mazo.#CARTAS.filter((carta) => 
         carta.numero = numero
@@ -129,7 +128,7 @@ class Carta {
 
 let mazo = new Mazo();
 
-let carta = Carta.seleccionarCarta(1, 1);
+let carta = Mazo.seleccionarCarta(1, 1);
 
 console.log(`La carta ${carta.mostrarTextoCarta()} tiene el valor de ${carta.getValor()}`);
 
