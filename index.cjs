@@ -7,9 +7,13 @@
  */
 class Carta {
 
-    static #NOMBRE_PALOS = ["Espadas", "Bastos", "Oros", "Copas"];
-    static #NUMERO_JUGABLES = [1, 3, 4, 5, 6, 7];
-    static #MAX_VALOR = 9
+    static NOMBRE_PALOS = ["Espadas", "Bastos", "Oros", "Copas"];
+    static NUMERO_JUGABLES = [1, 3, 4, 5, 6, 7];
+    static MAX_VALOR = 9
+
+    numero = 0;
+    palo = 0;
+    valor = 0;
 
     constructor(numero, palo, valor){
         this.setNumero(numero);
@@ -22,7 +26,7 @@ class Carta {
      * @returns {String} texto
      */
     mostrarTextoCarta(){
-        return `${this.numero} de ${Carta.#NOMBRE_PALOS.get(this.palo)}`;
+        return `${this.numero} de ${Carta.NOMBRE_PALOS[this.palo]}`;
     }
 
     /**
@@ -31,7 +35,7 @@ class Carta {
      */
     setNumero(numero){
 
-        if(!Carta.#NUMERO_JUGABLES.includes(numero)) {
+        if(!Carta.NUMERO_JUGABLES.includes(numero)) {
             throw RangeError("El rango del número de la carta no es válido.");
         }
 
@@ -44,7 +48,7 @@ class Carta {
      */
      setPalo(palo) {
 
-        if(palo < 0 || palo > Carta.#NOMBRE_PALOS.length){
+        if(palo < 0 || palo > Carta.NOMBRE_PALOS.length){
             throw RangeError("El rango del número identificador del palo no es válido.");
         }
 
@@ -56,7 +60,7 @@ class Carta {
      * @param {Integer} valor
      */
     setValor(valor){
-        if(valor < 1 || valor > Carta.#MAX_VALOR) {
+        if(valor < 1 || valor > Carta.MAX_VALOR) {
             throw RangeError("El rango del valor no es válido");
         }
 
@@ -84,7 +88,7 @@ class Carta {
     /**
      * Las cartas jugables del mazo
      */
-    static #CARTAS = [
+    static CARTAS = [
       new Carta(1, 0, 9),
       new Carta(1, 1, 8),
       new Carta(7, 0, 7),
@@ -121,7 +125,7 @@ class Carta {
  */
  static seleccionarCarta(numero, palo){
 
-    let carta = Mazo.#CARTAS.filter((carta) => 
+    let carta = Mazo.CARTAS.find((carta) => 
         carta.numero == numero
         && carta.palo == palo
     );
@@ -137,5 +141,3 @@ let carta = Mazo.seleccionarCarta(1, 1);
 console.log(carta);
 
 console.log(`La carta ${carta.mostrarTextoCarta()} tiene el valor de ${carta.getValor()}`);
-
-
