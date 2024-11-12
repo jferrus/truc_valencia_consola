@@ -112,23 +112,25 @@ class Carta {
         
     }
 
-    /**
-     * Devuelve el valor de la carta
-     * @param {Integer} numero 
-     * @param {Integer} palo 
-     * @returns {Integer} valor
-     */
-   static valorCarta(numero, palo){
+ /**
+  * Selecciona una carta a partir del número y del palo
+  * @returns {Carta} un objeto carta
+  */
+ static seleccionarCarta(){
 
-    const carta = Mazo.#CARTAS.filter((carta) => 
+    let carta = Mazo.#CARTAS.filter((carta) => 
         carta.numero = numero
         && carta.palo == palo
     );
 
-    return carta.getValor();    
+    return carta;
  }
 }
 
 let mazo = new Mazo();
 
-mazo.valorCarta(1, 1);
+let carta = Carta.seleccionarCarta(1, 1);
+
+console.log(`La carta ${carta.mostrarTextoCarta()} tiene el valor de ${carta.getValor()}`);
+
+
