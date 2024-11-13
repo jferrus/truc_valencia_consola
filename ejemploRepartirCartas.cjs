@@ -13,7 +13,7 @@ async function main() {
     console.log("---------------------");
     console.log("Cartas jugador 1");
     console.log("---------------------");
-    cartasTurnoJugador1 = repartir3Cartas();
+    cartasTurnoJugador1 = repartir3Cartas(mazo);
     mostrarListadoCartas(cartasTurnoJugador1);
 
     jugadaJugador1 = await getInput();
@@ -21,7 +21,7 @@ async function main() {
     console.log("---------------------");
     console.log("Cartas jugador 2");
     console.log("---------------------");
-    cartasTurnoJugador2 = repartir3Cartas();
+    cartasTurnoJugador2 = repartir3Cartas(mazo);
     mostrarListadoCartas(cartasTurnoJugador2);
 
     jugadaJugador2 = await getInput();
@@ -50,7 +50,7 @@ async function getInput() {
  * Repartir 3 cartas, se puede llamar a esta función 2 vez por turno
  * @returns 
  */
-function repartir3Cartas() {
+function repartir3Cartas(mazo) {
 
     let cartasTurnoJugador = [];
 
