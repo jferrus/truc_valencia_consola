@@ -1,4 +1,4 @@
-const {Mazo} = require("./controlador/clases.cjs")
+const {Mazo} = require("./modelo/clases.cjs")
 
 let carta = Mazo.seleccionarCarta(1, 1);
 
