@@ -1,6 +1,10 @@
 const readline = require('node:readline');
 const { Carta, Mazo } = require("./modelo/clases.cjs");
+const {resolve} = require("");
 
+/**
+ * Función principal
+ */
 async function main() {
     
     let mazo = new Mazo();
@@ -23,18 +27,19 @@ async function main() {
         console.log("---------------------");
         mostrarListadoCartas(cartasTurnoJugador1);
 
-        jugadaJugador1 = await getInput().then(() => {
-            console.clear();
-        });
+        jugadaJugador1 = await getInput();
+
+        console.log("=====>" + jugadaJugador1);
 
         console.log("---------------------");
         console.log("Cartas jugador 2");
         console.log("---------------------");  
 
         await mostrarListadoCartas(cartasTurnoJugador2);
-        jugadaJugador2 = await getInput().then(() => {
-            console.clear();
-        });
+        jugadaJugador2 = await getInput();
+
+        console.log("=====>" + jugadaJugador2);
+
 
         cartaJugador1 = cartasTurnoJugador1.at(jugadaJugador1 - 1);
         cartasTurnoJugador1.splice(jugadaJugador1 - 1, 1);
@@ -79,24 +84,6 @@ function calcularGanador2Cartas(cartaJugador1, cartaJugador2) {
 
     return ganador;
 }
- 
-/**
- * Da un mensaje al usuario y devuelve un número que identifica a una carta.
- */
-async function getIntro() {
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-  await new Promise(() => {
-    rl.question(`Pasa el ordenador al otro jugador, es su turno y que pulse Intro`, () => {
-        rl.close();
-    });
-  })
-  rl.close();
-}
 
 /**
  * Da un mensaje al usuario y devuelve un número que identifica a una carta.
@@ -115,6 +102,8 @@ async function getInput() {
     });
   });
   rl.close();
+
+  return answer;
 }
 
 /**
