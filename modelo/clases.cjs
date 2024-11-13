@@ -149,7 +149,6 @@ class Carta {
         indiceAleaotrio = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (MAX - MIN)) + MIN;
 
         carta = Mazo.CARTAS.at(indiceAleaotrio);
-        Mazo.CARTAS.splice(indiceAleaotrio, 1);
 
         return carta;
     }
