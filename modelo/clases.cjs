@@ -73,7 +73,8 @@ class Carta {
 
    getNumero(){
     return this.numero;
-   }
+   }  
+
 }
 
 /**
@@ -113,21 +114,36 @@ class Carta {
         
     }
 
-/**
-* Selecciona una carta a partir del número y del palo
- * @param {Integer} numero 
- * @param {Integer} palo 
- * @returns {Carta} un objeto carta
- */
- static seleccionarCarta(numero, palo){
+    /**
+    * Selecciona una carta a partir del número y del palo
+    * @param {Integer} numero 
+    * @param {Integer} palo 
+    * @returns {Carta} un objeto carta
+    */
+    static seleccionarCarta(numero, palo){
 
-    let carta = Mazo.CARTAS.find((carta) => 
-        carta.numero == numero
-        && carta.palo == palo
-    );
+        let carta = Mazo.CARTAS.find((carta) => 
+            carta.numero == numero
+            && carta.palo == palo
+        );
 
-    return carta;
- }
+        return carta;
+    }
+
+
+    /**
+     * Genera una carta aleatoria
+     * @returns {Carta} carta aleatoria
+     */
+    static generarCartaAleatoria() {
+        const MIN = 0;
+        const MAX = Mazo.CARTAS.length - 1;
+        
+        const RANDOM_INDEX = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (MAX - MIN + 1)) + MIN;
+
+        return Mazo.CARTAS[RANDOM_INDEX];
+    }
+
 }
 
 module.exports = {
