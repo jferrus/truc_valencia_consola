@@ -12,14 +12,15 @@ async function main() {
     let cartaJugador1 = null;
     let cartaJugador2 = null;
 
-    while(true) {
+    cartasTurnoJugador1 = await repartir3Cartas(mazo);
+    cartasTurnoJugador2 = await repartir3Cartas(mazo);
 
-        mazo.nuevoTurno();
+
+    while(true) {
 
         console.log("\n---------------------");
         console.log("Cartas jugador 1");
         console.log("---------------------");
-        cartasTurnoJugador1 = await repartir3Cartas(mazo);
         mostrarListadoCartas(cartasTurnoJugador1);
 
         jugadaJugador1 = await getInput().then(() => {
@@ -30,7 +31,6 @@ async function main() {
         console.log("Cartas jugador 2");
         console.log("---------------------");  
 
-        cartasTurnoJugador2 = await repartir3Cartas(mazo);
         await mostrarListadoCartas(cartasTurnoJugador2);
         jugadaJugador2 = await getInput().then(() => {
             console.clear();
