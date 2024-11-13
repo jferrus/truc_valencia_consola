@@ -110,8 +110,10 @@ class Carta {
       new Carta(4, 1, 1),
     ];
 
+    cartasRestantes = [];
+
     constructor(){
-        
+        this.nuevoMazo();
     }
 
     /**
@@ -135,13 +137,30 @@ class Carta {
      * Genera una carta aleatoria
      * @returns {Carta} carta aleatoria
      */
-    static generarCartaAleatoria() {
+    generarCartaAleatoria() {
         const MIN = 0;
-        const MAX = Mazo.CARTAS.length - 1;
-        
-        const RANDOM_INDEX = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (MAX - MIN + 1)) + MIN;
+        const MAX = this.cartasRestantes.length;
 
-        return Mazo.CARTAS[RANDOM_INDEX];
+        let indiceAleaotrio = -1;
+        let carta = null;
+        
+        if(MAX <= MIN){
+            throw RangeError("No quedan más cartas");
+        }
+
+        indiceAleaotrio = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (MAX - MIN)) + MIN;
+
+        carta = this.cartasRestantes.at(indiceAleaotrio);
+        this.cartasRestantes.splice(indiceAleaotrio, 1);
+
+        return carta;
+    }
+
+    /**
+     * Rellena el mazo con todas las cartas
+     */
+    nuevoMazo() {
+        this.cartasRestantes = [...Mazo.CARTAS]
     }
 
 }
