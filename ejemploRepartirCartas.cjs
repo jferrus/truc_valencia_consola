@@ -1,6 +1,5 @@
 const readline = require('node:readline');
 const { Carta, Mazo } = require("./modelo/clases.cjs");
-const {resolve} = require("");
 
 /**
  * Función principal
