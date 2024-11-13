@@ -1,22 +1,50 @@
+const readline = require('node:readline');
 const { Carta, Mazo } = require("./modelo/clases.cjs")
-const array = new Uint32Array(10);
 
-let mazo = new Mazo();
-let cartasTurnoJugador1 = [];
-let cartasTurnoJugador2 = [];
+async function main() {
 
-console.log("---------------------");
-console.log("Cartas jugador 1");
-console.log("---------------------");
-cartasTurnoJugador1 = repartir3Cartas();
-mostrarListadoCartas(cartasTurnoJugador1);
+    
+    let mazo = new Mazo();
+    let cartasTurnoJugador1 = [];
+    let cartasTurnoJugador2 = [];
+    let jugadaJugador1 = 0;
+    let jugadaJugador2 = 0;
 
-console.log("---------------------");
-console.log("Cartas jugador 2");
-console.log("---------------------");
-cartasTurnoJugador2 = repartir3Cartas();
-mostrarListadoCartas(cartasTurnoJugador2);
+    console.log("---------------------");
+    console.log("Cartas jugador 1");
+    console.log("---------------------");
+    cartasTurnoJugador1 = repartir3Cartas();
+    mostrarListadoCartas(cartasTurnoJugador1);
 
+    jugadaJugador1 = await getInput();
+
+    console.log("---------------------");
+    console.log("Cartas jugador 2");
+    console.log("---------------------");
+    cartasTurnoJugador2 = repartir3Cartas();
+    mostrarListadoCartas(cartasTurnoJugador2);
+
+    jugadaJugador2 = await getInput();
+}
+
+/**
+ * Da un mensaje al usuario y devuelve un número que identifica a una carta.
+ */
+async function getInput() {
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+  const answer = await new Promise(resolve => {
+    rl.question(`¿Qué carta vas a jugar?: `, numero => {
+        resolve(numero);
+        rl.close();
+    });
+  });
+  rl.close();
+}
 
 /**
  * Repartir 3 cartas, se puede llamar a esta función 2 vez por turno
@@ -47,11 +75,14 @@ function repartir3Cartas() {
  * @param {Carta[]} cartas 
  */
 function mostrarListadoCartas(cartas) {
-    cartas.forEach(carta => {
+    cartas.forEach((carta, index)=> {
         if(carta instanceof Carta){
-            console.log(carta.mostrarTextoCarta());
+            console.log(`${index + 1}: ${carta.mostrarTextoCarta()}`);
         } else {
             throw TypeError("La variable no es de la clase correcta");
         }
     });
 }
+
+main();
+
