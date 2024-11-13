@@ -110,10 +110,8 @@ class Carta {
       new Carta(4, 1, 1),
     ];
 
-    cartasRestantes = [];
-
     constructor(){
-        this.nuevoMazo();
+
     }
 
     /**
@@ -137,9 +135,9 @@ class Carta {
      * Genera una carta aleatoria
      * @returns {Carta} carta aleatoria
      */
-    generarCartaAleatoria() {
+    static generarCartaAleatoria() {
         const MIN = 0;
-        const MAX = this.cartasRestantes.length;
+        const MAX = Mazo.CARTAS.length;
 
         let indiceAleaotrio = -1;
         let carta = null;
@@ -150,17 +148,10 @@ class Carta {
 
         indiceAleaotrio = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (MAX - MIN)) + MIN;
 
-        carta = this.cartasRestantes.at(indiceAleaotrio);
-        this.cartasRestantes.splice(indiceAleaotrio, 1);
+        carta = Mazo.CARTAS.at(indiceAleaotrio);
+        Mazo.CARTAS.splice(indiceAleaotrio, 1);
 
         return carta;
-    }
-
-    /**
-     * Rellena el mazo con todas las cartas
-     */
-    nuevoMazo() {
-        this.cartasRestantes = [...Mazo.CARTAS]
     }
 
 }
