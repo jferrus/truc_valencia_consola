@@ -1,10 +1,10 @@
-const {Mazo} = require("./modelo/clases.cjs")
-const array = new Uint32Array(10);
+const { Mazo } = require("./modelo/clases.cjs")
 
 let mazo = new Mazo();
+let carta = null;
+let i = 0;
 
-for(let i = 0; i < 30; i++) {
-    let carta = null;
+for(i = 0; i < 30; i++) {
     
     try {
         carta = mazo.generarCartaAleatoria();
@@ -14,12 +14,4 @@ for(let i = 0; i < 30; i++) {
     } catch (e) {
         console.log(`${i}: No quedan más cartas`);
     }
-
-    //console.log(carta);
-
 }
-
-
-
-
-
