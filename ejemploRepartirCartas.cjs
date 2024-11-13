@@ -1,4 +1,4 @@
-const {Carta, Mazo} = require("./modelo/clases.cjs")
+const { Carta, Mazo } = require("./modelo/clases.cjs")
 const array = new Uint32Array(10);
 
 let mazo = new Mazo();
@@ -32,7 +32,7 @@ function repartir3Cartas() {
         try {
             carta = mazo.generarCartasTurnoSinRepetir();
     
-            cartasTurnoJugador.add(carta);
+            cartasTurnoJugador.push(carta);
     
         } catch (e) {
             console.log(`${i + 1}: No quedan más cartas`);
@@ -48,13 +48,10 @@ function repartir3Cartas() {
  */
 function mostrarListadoCartas(cartas) {
     cartas.forEach(carta => {
-        if(typeof carta === Carta){
+        if(carta instanceof Carta){
             console.log(carta.mostrarTextoCarta());
         } else {
             throw TypeError("La variable no es de la clase correcta");
         }
     });
 }
-
-
-
