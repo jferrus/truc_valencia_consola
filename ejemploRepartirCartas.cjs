@@ -1,30 +1,101 @@
 const readline = require('node:readline');
-const { Carta, Mazo } = require("./modelo/clases.cjs")
+const { Carta, Mazo } = require("./modelo/clases.cjs");
 
 async function main() {
-
     
     let mazo = new Mazo();
     let cartasTurnoJugador1 = [];
     let cartasTurnoJugador2 = [];
     let jugadaJugador1 = 0;
     let jugadaJugador2 = 0;
+    let jugadorGanador = 0;
+    let cartaJugador1 = null;
+    let cartaJugador2 = null;
 
-    console.log("---------------------");
-    console.log("Cartas jugador 1");
-    console.log("---------------------");
-    cartasTurnoJugador1 = repartir3Cartas(mazo);
-    mostrarListadoCartas(cartasTurnoJugador1);
+    while(true) {
 
-    jugadaJugador1 = await getInput();
+        mazo.nuevoTurno();
 
-    console.log("---------------------");
-    console.log("Cartas jugador 2");
-    console.log("---------------------");
-    cartasTurnoJugador2 = repartir3Cartas(mazo);
-    mostrarListadoCartas(cartasTurnoJugador2);
+        console.log("\n---------------------");
+        console.log("Cartas jugador 1");
+        console.log("---------------------");
+        cartasTurnoJugador1 = await repartir3Cartas(mazo);
+        mostrarListadoCartas(cartasTurnoJugador1);
 
-    jugadaJugador2 = await getInput();
+        jugadaJugador1 = await getInput().then(() => {
+            console.clear();
+        });
+
+        console.log("---------------------");
+        console.log("Cartas jugador 2");
+        console.log("---------------------");  
+
+        cartasTurnoJugador2 = await repartir3Cartas(mazo);
+        await mostrarListadoCartas(cartasTurnoJugador2);
+        jugadaJugador2 = await getInput().then(() => {
+            console.clear();
+        });
+
+        cartaJugador1 = cartasTurnoJugador1.at(jugadaJugador1 - 1);
+        cartasTurnoJugador1.splice(jugadaJugador1 - 1, 1);
+
+        cartaJugador2 = cartasTurnoJugador2.at(jugadaJugador2 - 1);
+        cartasTurnoJugador2.splice(jugadaJugador2 - 1, 1);
+
+        jugadorGanador = calcularGanador2Cartas(cartaJugador1, cartaJugador2);
+
+        if(jugadorGanador > 0){
+            console.log(`\n¡Ha ganado el jugador ${jugadorGanador}!`);
+        } else {
+            console.log("\nEmpate")
+        }
+    }
+}
+    
+
+    
+
+/**
+ * Calcular el ganador entre dos cartas:
+ * 0: empate
+ * 1: gana la carta 1
+ * 2: gana la carta 2
+ * @param {Carta} cartaJugador1 
+ * @param {Carta} cartaJugador2 
+ * @returns {Integer} número de jugador
+ */
+function calcularGanador2Cartas(cartaJugador1, cartaJugador2) {
+
+    let ganador = 0;
+
+    console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
+    console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
+
+    if(cartaJugador1.getValor() > cartaJugador2.getValor()){
+        ganador = 1;
+    } else if (cartaJugador1.getValor() < cartaJugador2.getValor()) {
+        ganador = 2;
+    }
+
+    return ganador;
+}
+ 
+/**
+ * Da un mensaje al usuario y devuelve un número que identifica a una carta.
+ */
+async function getIntro() {
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+  await new Promise(() => {
+    rl.question(`Pasa el ordenador al otro jugador, es su turno y que pulse Intro`, () => {
+        rl.close();
+    });
+  })
+  rl.close();
 }
 
 /**
@@ -50,7 +121,7 @@ async function getInput() {
  * Repartir 3 cartas, se puede llamar a esta función 2 vez por turno
  * @returns 
  */
-function repartir3Cartas(mazo) {
+async function repartir3Cartas(mazo) {
 
     let cartasTurnoJugador = [];
 
@@ -74,7 +145,7 @@ function repartir3Cartas(mazo) {
  * Muestra un listado de cartas por línea de comandos
  * @param {Carta[]} cartas 
  */
-function mostrarListadoCartas(cartas) {
+async function mostrarListadoCartas(cartas) {
     cartas.forEach((carta, index)=> {
         if(carta instanceof Carta){
             console.log(`${index + 1}: ${carta.mostrarTextoCarta()}`);
