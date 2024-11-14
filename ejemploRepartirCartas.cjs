@@ -24,12 +24,19 @@ async function main() {
     let cartaJugador1 = null;
     let cartaJugador2 = null;
 
+    let envidaJugador1 = false;
+    let envidaJugador2 = false;
+    let trucaJugador1 = false;
+    let trucaJugador2 = false;
+
+    let jugadasTurnoGanadasJugador1 = 0;
+    let jugadasTurnoGanadasJugador2 = 0;
+
     cartasTurnoJugador1 = await repartir3Cartas(mazo);
     cartasTurnoJugador2 = await repartir3Cartas(mazo);
 
 
     for(i = 0; i < MAX_JUGADAS_TURNO; i++) {
-
 
         console.log(`\nTurno 1, jugada ${i+1}\n`);
         
@@ -52,6 +59,16 @@ async function main() {
 
         rl.pause();
 
+        /*
+        if(!envidaJugador1){
+            envidaJugador1 = await getInputEnvidarTurno();
+        }
+        */
+
+        if(!trucaJugador1) {
+            trucaJugador1 = await getInputTrucarTurno();
+        }
+
         console.log("---------------------");
         console.log("Cartas jugador 2");
         console.log("---------------------");  
@@ -68,7 +85,33 @@ async function main() {
             cartaJugador2.setOculta();
         }
 
-        console.log("\nEsta ha sido la jugada")
+        /*
+        if(!envidaJugador2){
+            envidaJugador2 = await getInputEnvidarTurno();
+        }
+        */
+
+        if(!trucaJugador2) {
+            trucaJugador2 = await getInputTrucarTurno();
+
+            if(!trucaJugador1) {
+                console.log("Jugador 1:");
+                trucaJugador1 = await getInputTrucarTurno();
+            }
+        }
+
+        if(!trucaJugador1 || !trucaJugador2) {
+            trucaJugador1 == false;
+            trucaJugador2 == false;
+        }
+
+        console.log("\nEsta ha sido la jugada\n :")
+
+        if(!trucaJugador1 || !trucaJugador2) {
+            console.log("No se ha aceptado el truco\n");
+        } else {
+            console.log("Se ha aceptado el truco\n");
+        }
 
         console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
         console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
@@ -76,18 +119,31 @@ async function main() {
         jugadorGanador = calcularGanador2Cartas(cartaJugador1, cartaJugador2);
 
         if(jugadorGanador > 0){
-            console.log(`\n¡Ha ganado el jugador ${jugadorGanador}!`);
+            console.log(`\n¡Ha ganado la jugada el jugador ${jugadorGanador}!`);
+
+            if(jugadorGanador === 1) {
+                jugadasTurnoGanadasJugador1++;
+            } else if(jugadorGanador === 2){
+                jugadasTurnoGanadasJugador2++;
+            }
         } else {
             console.log("\nPardes")
+        }
+    }
+
+    if(trucaJugador1 && trucaJugador2){
+        if(jugadasTurnoGanadasJugador1 > jugadasTurnoGanadasJugador2) {
+            console.log("Gana el truco el jugador 1");
+        } else if (jugadasTurnoGanadasJugador1 < jugadasTurnoGanadasJugador2) {
+            console.log("Gana el truco el jugador 2");
+        } else {
+            console.log("EMPATE EN EL TRUCO: No gana el truco nadie");
         }
     }
 
     rl.close();
     console.log("\nFIN DEL TURNO")
 }
-    
-
-    
 
 /**
  * Calcular el ganador entre dos cartas:
@@ -129,7 +185,7 @@ async function getInputCartaOculta() {
 
     const answer = await new Promise(resolve => {
 
-        rl.question(`¿La quieres jugadr en oculto? s/N : `, respuesta => {
+        rl.question(`¿La quieres jugar en oculto? s/N : `, respuesta => {
 
 
             if(respuesta && (respuesta === "s" || respuesta === "S")){
@@ -143,6 +199,51 @@ async function getInputCartaOculta() {
   return answer;
 }
 
+/**
+ * Da un mensaje al usuario pregunta si la quiere trucar en este turno
+ * @returns {boolean} true truca, false nada
+ */
+async function getInputTrucarTurno() {
+
+    const answer = await new Promise(resolve => {
+
+        rl.question(`¿Quieres trucar? s/N : `, respuesta => {
+
+
+            if(respuesta && (respuesta === "s" || respuesta === "S")){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
+  })
+
+  return answer;
+}
+
+/**
+ * Da un mensaje al usuario pregunta si la quiere trucar en este turno
+ * @returns {boolean} true truca, false nada
+ */
+/*
+async function getInputEnvidarTurno() {
+
+    const answer = await new Promise(resolve => {
+
+        rl.question(`¿Quieres envidar? s/N : `, respuesta => {
+
+
+            if(respuesta && (respuesta === "s" || respuesta === "S")){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
+  })
+
+  return answer;
+}
+*/
 
 /**
  * Da un mensaje al usuario y devuelve un número que identifica a una carta.
@@ -199,4 +300,3 @@ async function mostrarListadoCartas(cartas) {
 }
 
 main();
-
