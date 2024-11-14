@@ -1,11 +1,20 @@
 const readline = require('node:readline');
 const { Carta, Mazo } = require("./modelo/clases.cjs");
 
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
+
 /**
  * Función principal
  */
 async function main() {
+
+    let MAX_JUGADAS_TURNO = 3;
     
+    let i = 0;
     let mazo = new Mazo();
     let cartasTurnoJugador1 = [];
     let cartasTurnoJugador2 = [];
@@ -19,16 +28,27 @@ async function main() {
     cartasTurnoJugador2 = await repartir3Cartas(mazo);
 
 
-    while(true) {
+    for(i = 0; i < MAX_JUGADAS_TURNO; i++) {
 
-        console.log("\n---------------------");
+
+        console.log(`\nTurno 1, jugada ${i+1}\n`);
+        
+        console.log("---------------------");
         console.log("Cartas jugador 1");
         console.log("---------------------");
         mostrarListadoCartas(cartasTurnoJugador1);
 
         jugadaJugador1 = await getInput();
 
-        console.log("=====>" + jugadaJugador1);
+        rl.pause();
+
+
+        cartaJugador1 = cartasTurnoJugador1.at(jugadaJugador1 - 1);
+        cartasTurnoJugador1.splice(jugadaJugador1 - 1, 1);
+
+        cartaJugador1.setOculta(await getInputCartaOculta())
+
+        rl.pause();
 
         console.log("---------------------");
         console.log("Cartas jugador 2");
@@ -37,23 +57,26 @@ async function main() {
         await mostrarListadoCartas(cartasTurnoJugador2);
         jugadaJugador2 = await getInput();
 
-        console.log("=====>" + jugadaJugador2);
-
-
-        cartaJugador1 = cartasTurnoJugador1.at(jugadaJugador1 - 1);
-        cartasTurnoJugador1.splice(jugadaJugador1 - 1, 1);
+        rl.pause();
 
         cartaJugador2 = cartasTurnoJugador2.at(jugadaJugador2 - 1);
         cartasTurnoJugador2.splice(jugadaJugador2 - 1, 1);
+
+        cartaJugador2.setOculta(await getInputCartaOculta());
+
+      
 
         jugadorGanador = calcularGanador2Cartas(cartaJugador1, cartaJugador2);
 
         if(jugadorGanador > 0){
             console.log(`\n¡Ha ganado el jugador ${jugadorGanador}!`);
         } else {
-            console.log("\nEmpate")
+            console.log("\nPardes")
         }
     }
+
+    rl.close();
+    console.log("\nFIN DEL TURNO")
 }
     
 
@@ -75,32 +98,62 @@ function calcularGanador2Cartas(cartaJugador1, cartaJugador2) {
     console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
     console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
 
-    if(cartaJugador1.getValor() > cartaJugador2.getValor()){
-        ganador = 1;
-    } else if (cartaJugador1.getValor() < cartaJugador2.getValor()) {
-        ganador = 2;
+    if(cartaJugador1.isOculta() ||  cartaJugador2.isOculta()){
+        if (cartaJugador1.isOculta() && cartaJugador2.isOculta()){
+            ganador = 0;
+        } else if(cartaJugador1.isOculta()) {
+            ganador = 2;
+        } else {
+            ganador = 1;
+        }
+    } else {
+        if(cartaJugador1.getValor() > cartaJugador2.getValor()){
+            ganador = 1;
+        } else if (cartaJugador1.getValor() < cartaJugador2.getValor()) {
+            ganador = 2;
+        }
     }
 
     return ganador;
 }
 
 /**
+ * Da un mensaje al usuario pregunta si la quiere jugar en oculto.
+ * @returns {boolean} true oculta, false visible
+ */
+async function getInputCartaOculta() {
+
+    const answer = await new Promise(resolve => {
+
+            rl.question(`¿La quieres jugadr en oculto? s/N : `, respuesta => {
+    
+
+                if(respuesta && (respuesta === "s" || respuesta === "S")){
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+
+
+            })
+  })
+
+  return answer;
+}
+
+
+/**
  * Da un mensaje al usuario y devuelve un número que identifica a una carta.
  */
-async function getInput() {
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
+ async function getInput() {
+  
   const answer = await new Promise(resolve => {
-    rl.question(`¿Qué carta vas a jugar?: `, numero => {
-        resolve(numero);
-        rl.close();
+
+        rl.question(`¿Qué carta vas a jugar?: `, numero => {
+            resolve(numero);
+        });
+
     });
-  });
-  rl.close();
 
   return answer;
 }

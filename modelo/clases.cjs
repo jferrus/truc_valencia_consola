@@ -11,6 +11,8 @@ class Carta {
     palo = 0;
     valor = 0;
 
+    oculta = false;
+
     constructor(numero, palo, valor){
         this.setNumero(numero);
         this.setPalo(palo);
@@ -22,7 +24,15 @@ class Carta {
      * @returns {String} texto
      */
     mostrarTextoCarta(){
-        return `${this.numero} de ${Carta.NOMBRE_PALOS[this.palo]}`;
+        let mensaje = "";
+        
+        if(this.isOculta()){
+            mensaje = "La carta está oculta";
+        } else {
+            mensaje = `${this.numero} de ${Carta.NOMBRE_PALOS[this.palo]}`;
+        }
+
+        return mensaje;
     }
 
     /**
@@ -52,6 +62,13 @@ class Carta {
     }
 
     /**
+     * La carta no la podrá ver el otro jugador
+     */
+    setOculta(){
+        this.oculta = true;
+    }
+
+    /**
      * Insertar el valor de la carta
      * @param {Integer} valor
      */
@@ -74,6 +91,10 @@ class Carta {
    getNumero(){
     return this.numero;
    }  
+
+   isOculta() {
+    return this.oculta;
+   }
 
 }
 
