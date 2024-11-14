@@ -46,7 +46,9 @@ async function main() {
         cartaJugador1 = cartasTurnoJugador1.at(jugadaJugador1 - 1);
         cartasTurnoJugador1.splice(jugadaJugador1 - 1, 1);
 
-        cartaJugador1.setOculta(await getInputCartaOculta())
+        if(await getInputCartaOculta()) {
+            cartaJugador1.setOculta();
+        }
 
         rl.pause();
 
@@ -62,9 +64,14 @@ async function main() {
         cartaJugador2 = cartasTurnoJugador2.at(jugadaJugador2 - 1);
         cartasTurnoJugador2.splice(jugadaJugador2 - 1, 1);
 
-        cartaJugador2.setOculta(await getInputCartaOculta());
+        if(await getInputCartaOculta()) {
+            cartaJugador2.setOculta();
+        }
 
-      
+        console.log("\nEsta ha sido la jugada")
+
+        console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
+        console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
 
         jugadorGanador = calcularGanador2Cartas(cartaJugador1, cartaJugador2);
 
@@ -95,9 +102,6 @@ function calcularGanador2Cartas(cartaJugador1, cartaJugador2) {
 
     let ganador = 0;
 
-    console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
-    console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
-
     if(cartaJugador1.isOculta() ||  cartaJugador2.isOculta()){
         if (cartaJugador1.isOculta() && cartaJugador2.isOculta()){
             ganador = 0;
@@ -125,17 +129,15 @@ async function getInputCartaOculta() {
 
     const answer = await new Promise(resolve => {
 
-            rl.question(`¿La quieres jugadr en oculto? s/N : `, respuesta => {
-    
-
-                if(respuesta && (respuesta === "s" || respuesta === "S")){
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
+        rl.question(`¿La quieres jugadr en oculto? s/N : `, respuesta => {
 
 
-            })
+            if(respuesta && (respuesta === "s" || respuesta === "S")){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
   })
 
   return answer;
