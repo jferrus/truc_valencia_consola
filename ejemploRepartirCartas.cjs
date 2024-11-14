@@ -36,7 +36,7 @@ async function main() {
     cartasTurnoJugador2 = await repartir3Cartas(mazo);
 
 
-    for(i = 0; i < MAX_JUGADAS_TURNO; i++) {
+    for(i = 0; i < MAX_JUGADAS_TURNO && trucaJugador1 === trucaJugador2; i++) {
 
         console.log(`\nTurno 1, jugada ${i+1}\n`);
         
@@ -93,42 +93,42 @@ async function main() {
 
         if(!trucaJugador2) {
             trucaJugador2 = await getInputTrucarTurno();
-
+        } else {
             if(!trucaJugador1) {
                 console.log("Jugador 1:");
                 trucaJugador1 = await getInputTrucarTurno();
             }
         }
 
-        if(!trucaJugador1 || !trucaJugador2) {
-            trucaJugador1 == false;
-            trucaJugador2 == false;
-        }
+        if(trucaJugador1 === trucaJugador2) {
+            console.log("\nEsta ha sido la jugada:\n")
 
-        console.log("\nEsta ha sido la jugada\n :")
-
-        if(!trucaJugador1 || !trucaJugador2) {
-            console.log("No se ha aceptado el truco\n");
-        } else {
-            console.log("Se ha aceptado el truco\n");
-        }
-
-        console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
-        console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
-
-        jugadorGanador = calcularGanador2Cartas(cartaJugador1, cartaJugador2);
-
-        if(jugadorGanador > 0){
-            console.log(`\n¡Ha ganado la jugada el jugador ${jugadorGanador}!`);
-
-            if(jugadorGanador === 1) {
-                jugadasTurnoGanadasJugador1++;
-            } else if(jugadorGanador === 2){
-                jugadasTurnoGanadasJugador2++;
+            if(!trucaJugador1 || !trucaJugador2) {
+                console.log("No se ha aceptado el truco\n");
+                
+            } else {
+                console.log("Se ha aceptado el truco\n");
             }
-        } else {
-            console.log("\nPardes")
+    
+            console.log(`Carta Jugador 1: ${cartaJugador1.mostrarTextoCarta()}`);
+            console.log(`Carta Jugador 2: ${cartaJugador2.mostrarTextoCarta()}`);
+    
+            jugadorGanador = calcularGanador2Cartas(cartaJugador1, cartaJugador2);
+    
+            if(jugadorGanador > 0){
+                console.log(`\n¡Ha ganado la jugada el jugador ${jugadorGanador}!`);
+    
+                if(jugadorGanador === 1) {
+                    jugadasTurnoGanadasJugador1++;
+                } else if(jugadorGanador === 2){
+                    jugadasTurnoGanadasJugador2++;
+                }
+            } else {
+                console.log("\nPardes")
+            }
         }
+            
+        
     }
 
     if(trucaJugador1 && trucaJugador2){
@@ -138,6 +138,12 @@ async function main() {
             console.log("Gana el truco el jugador 2");
         } else {
             console.log("EMPATE EN EL TRUCO: No gana el truco nadie");
+        }
+    } else {
+        if(trucaJugador1 && !trucaJugador2){
+            console.log("Gana el jugador 1");
+        } else if(!trucaJugador1 && trucaJugador2){
+            console.log("Gana el jugador 2");
         }
     }
 
