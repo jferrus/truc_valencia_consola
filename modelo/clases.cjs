@@ -177,6 +177,7 @@ class Carta {
 
         this.cartasRepartidas++;
 
+
         return carta;
     }
 
