@@ -11,6 +11,8 @@ class Carta {
     palo = 0;
     valor = 0;
 
+    oculta = false;
+
     constructor(numero, palo, valor){
         this.setNumero(numero);
         this.setPalo(palo);
@@ -22,7 +24,15 @@ class Carta {
      * @returns {String} texto
      */
     mostrarTextoCarta(){
-        return `${this.numero} de ${Carta.NOMBRE_PALOS[this.palo]}`;
+        let mensaje = "";
+        
+        if(this.isOculta()){
+            mensaje = "La carta está oculta";
+        } else {
+            mensaje = `${this.numero} de ${Carta.NOMBRE_PALOS[this.palo]}`;
+        }
+
+        return mensaje;
     }
 
     /**
@@ -52,6 +62,13 @@ class Carta {
     }
 
     /**
+     * La carta no la podrá ver el otro jugador
+     */
+    setOculta(){
+        this.oculta = true;
+    }
+
+    /**
      * Insertar el valor de la carta
      * @param {Integer} valor
      */
@@ -74,6 +91,10 @@ class Carta {
    getNumero(){
     return this.numero;
    }  
+
+   isOculta() {
+    return this.oculta;
+   }
 
 }
 
@@ -110,8 +131,13 @@ class Carta {
       new Carta(4, 1, 1),
     ];
 
-    constructor(){
+    static MAX_CARTAS_TURNO = 6;
 
+    cartasRestantes = [];
+    cartasRepartidas = 0;
+
+    constructor(){
+        this.nuevoTurno();
     }
 
     /**
@@ -132,25 +158,35 @@ class Carta {
 
 
     /**
-     * Genera una carta aleatoria
+     * Genera una carta aleatoria, con un límite de 6 cartas por cada turno
      * @returns {Carta} carta aleatoria
      */
-    static generarCartaAleatoria() {
-        const MIN = 0;
-        const MAX = Mazo.CARTAS.length;
+    generarCartasTurnoSinRepetir() {
 
         let indiceAleaotrio = -1;
         let carta = null;
         
-        if(MAX <= MIN){
-            throw RangeError("No quedan más cartas");
+        if(this.cartasRepartidas >= Mazo.MAX_CARTAS_TURNO){
+            throw RangeError("No quedan más cartas para este turno");
         }
 
-        indiceAleaotrio = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (MAX - MIN)) + MIN;
+        indiceAleaotrio = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000 * (Mazo.MAX_CARTAS_TURNO - 0)) + 0;
 
-        carta = Mazo.CARTAS.at(indiceAleaotrio);
+        carta = this.cartasRestantesTurno.at(indiceAleaotrio);
+        this.cartasRestantesTurno.splice(indiceAleaotrio, 1);
+
+        this.cartasRepartidas++;
+
 
         return carta;
+    }
+
+    /**
+     * Rellena el mazo con todas las cartas
+     */
+    nuevoTurno() {
+        this.cartasRestantesTurno = [...Mazo.CARTAS];
+        this.cartasRepartidas = 0;
     }
 
 }
